@@ -17,7 +17,7 @@ const upload = multer({
 });
 
 type Data = {
-  data: Object,
+  data: string,
 }
 
 export default function handler(
@@ -27,14 +27,14 @@ export default function handler(
 
   if(req.method === 'POST') {
 
-    const file = fs.readFileSync(req.file.path);
-    const encode_img = file.toString('base64');
-    const final_img = {
-        contentType: req.file.mimetype,
-        image: new Buffer(encode_img,'base64')
-    };
+    // const file = fs.readFileSync(req.file.path);
+    // const encode_img = file.toString('base64');
+    // const final_img = {
+    //     contentType: req.file.mimetype,
+    //     image: new Buffer(encode_img,'base64')
+    // };
    
-    res.status(200).json(req.body)
+    res.status(200).json({ data: "success"})
   }
 
   // if(req.method === 'GET') {

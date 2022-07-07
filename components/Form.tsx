@@ -2,35 +2,35 @@
 const Form = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const target = e.target as HTMLFormElement;
-    // Get data from the form.
-    const data = {
-      name: target.doc.value,
-    }
+    // const target = e.target as HTMLFormElement;
+    // // Get data from the form.
+    // const data = {
+    //   name: target.doc.value,
+    // }
 
     // Send the data to the server in JSON format.
-    const JSONdata = JSON.stringify(data)
+    // const JSONdata = JSON.stringify(data)
 
     // Form the request for sending data to the server.
-    const options = {
-      // The method is POST because we are sending data.
-      method: 'POST',
-      // Tell the server we're sending JSON.
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // Body of the request is the JSON data we created above.
-      body: JSONdata,
-    }
+    // const options = {
+    //   // The method is POST because we are sending data.
+    //   method: 'POST',
+    //   // Tell the server we're sending JSON.
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   // Body of the request is the JSON data we created above.
+    //   body: JSONdata,
+    // }
 
     // Send the form data to our forms API on Vercel and get a response.
-    const response = await fetch('/api/form', options)
+    // const response = await fetch('/api/form', options)
 
     // Get the response data from server as JSON.
     // If server returns the name submitted, that means the form works.
-    const result = await response.json()
-    console.log(result)
-    alert(`Is this your full name: ${result.doc}`)
+    // const result = await response.json()
+    // console.log(result)
+    // alert(`Is this your full name: ${result.doc}`)
   }
 
   return (
