@@ -1,7 +1,5 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
 import FileComponent from '../components/FileComponent'
 import Form from '../components/Form'
 
@@ -22,7 +20,7 @@ const Home: NextPage = () => {
         <Form/>
       </header>
 
-      <main className='grid grid-cols-3 pt-10'>
+      <main className='grid grid-cols-3 pt-10 gap-8'>
         <FileComponent/>
       </main>
 

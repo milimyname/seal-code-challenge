@@ -9,7 +9,7 @@ const FileComponent = () => {
   }
   
   return (
-    <div className={`bg-white rounded-lg py-5 px-5 shadow-excel `} onClick={handleRedirection} >
+    <div className={`bg-white rounded-lg py-5 px-5 shadow-excel transition ease-in hover:translate-y-[2px]`} onClick={handleRedirection} >
       <div className="flex justify-between items-center gap-5">
         <Image src="/icons/excel.svg" alt="excel icon" width={22} height={27}/>
         <h2 className="text-[1.6rem] font-bold flex-1">Doc Name</h2>
