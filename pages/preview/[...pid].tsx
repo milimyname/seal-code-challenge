@@ -1,13 +1,39 @@
-import type { NextPage } from 'next'
+import type { NextPage, } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import Image from 'next/image'
 import { useRouter } from "next/router"
+import { MouseEvent, useEffect, useState} from "react";
 
 
 const Preview: NextPage = () => {
+  const [link, setLink] = useState<string>('');
   const router = useRouter();
   const { pid } = router.query;
+  const binaryData = [] as Array<string>;
+
+  // Deactivate the link after a hour
+  useEffect(()=>{
+    setTimeout(() => {  
+      URL.revokeObjectURL(link)
+    }, 1000 * 60 * 60);
+   }
+  ,[link])
+
+
+  const handleCopyLink = async (e: MouseEvent<HTMLButtonElement>)=>{
+    e.preventDefault();
+    
+    if(!pid) return;
+    const {url} = await fetch(`${window.location.origin}/uploads/${pid[0]}/${pid[1]}`)
+    binaryData.push(url)
+
+    // Temporary link
+    const link = URL.createObjectURL(new Blob(binaryData));
+    await navigator.clipboard.writeText(link.slice(5,-1));
+    alert(`Copied to clipboard`);
+    setLink(link);
+  }
+
 
   return (
     <div className='max-w-6xl mx-auto'>
@@ -23,15 +49,19 @@ const Preview: NextPage = () => {
             Back
           </a>
         </Link>
-        
-        <h1 className="text-4xl text-white">
-          {pid && pid[1].split('-')[0]}
-        </h1>
+        <div className='flex items-center gap-10'>
+          <h1 className="text-4xl text-white">
+            {pid && pid[1].split('-')[0]}
+          </h1>
+          <button className="text-2xl text-white bg-text rounded-lg px-12 py-4 cursor-pointer" onClick={handleCopyLink} >
+            Share
+          </button>
+        </div>
       </header>
 
       <main className='pt-10'>
         {
-          pid && <embed src={`/uploads/${pid[0]}/${pid[1]}`} width={`100%`} height={'600'}/>
+          pid && <embed src={`/uploads/${pid[0]}/${pid[1]}`} width={`100%`} height={'680'}/>
         }
       </main>
 

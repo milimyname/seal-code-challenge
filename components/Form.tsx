@@ -1,4 +1,4 @@
-import { useState, MouseEvent, ChangeEvent, FormEvent} from "react";
+import { useState, MouseEvent, ChangeEvent} from "react";
 
 const Form = () => {
   const [file, SetFile] = useState<FileList | null>(null);
@@ -12,10 +12,10 @@ const Form = () => {
       alert("No file was chosen");
       return;
     }
-    const file = fileInput.files;
-
-    SetFile(file);
-
+    // Update File
+    SetFile(fileInput.files);
+  
+    // For clearing input
     setInputElement(fileInput);
   };
 
@@ -25,27 +25,28 @@ const Form = () => {
     if(!file) return alert('No file was chosen');
     
     try{
+    // Upload file
     let formData = new FormData();
-
     for (let i = 0; i < file.length; ++i) {
       formData.append('media', file[i])
     }
-
-
+    // Send file
     await fetch('/api/upload', {
       method: "POST",
       body: formData
     })
 
   } catch (error) {
+    // Handle error
     console.error(error);
     alert("Sorry! something went wrong.");
   }
 
+  // Clear input
   if(inputElement !== null) inputElement.value = "";
   document.location.reload();
   }
-
+  // Add a btn to delete all files
   // const handleDeleteAllFiles = async (e: MouseEvent<HTMLButtonElement>) =>{
   //   e.preventDefault();
   //   alert('Deleted all files');

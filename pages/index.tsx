@@ -16,6 +16,7 @@ const Home: NextPage= () => {
   const [data, SetData] = useState<TypeDoc[]>()
   const [loading, SetLoading] = useState<boolean>(false)
 
+  // Get Data from API
   const getAllDocs = async () => {
    const {data} = await (await fetch('/api/upload')).json();
     const json = JSON.parse(data)
