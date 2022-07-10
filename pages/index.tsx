@@ -1,10 +1,33 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useEffect, useState} from 'react'
 import FileComponent from '../components/FileComponent'
 import Form from '../components/Form'
 
+export interface TypeDoc{
+  id: string;
+  name: string[];
+  url: string[];
+  createdAt: string;
+  updatedAt: string;
+}
 
-const Home: NextPage = () => {
+const Home: NextPage= () => {
+  const [data, SetData] = useState<TypeDoc[]>()
+
+  const getAllDocs = async () => {
+   const {data} = await (await fetch('/api/upload')).json();
+    const json = JSON.parse(data)
+    SetData(json)
+    
+  }
+
+  useEffect(
+      () => {
+      getAllDocs()
+    }
+  , [])
+
   return (
     <div className='max-w-6xl mx-auto'>
       <Head>
@@ -21,11 +44,18 @@ const Home: NextPage = () => {
       </header>
 
       <main className='grid grid-cols-3 pt-10 gap-8'>
-        <FileComponent/>
+        {
+          data?.map((doc: TypeDoc) => {
+            return <FileComponent key={doc.id} doc={doc}/>
+          })
+        }
       </main>
 
     </div>
   )
 }
+
+
+
 
 export default Home

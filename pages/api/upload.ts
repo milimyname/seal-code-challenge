@@ -1,11 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse, } from 'next'
 import formidable from 'formidable'
 import mime from 'mime'
 import * as datefns from 'date-fns'
 import {join} from 'path';
 import { mkdir, stat } from "fs/promises";
-import { createDoc } from "../../prisma";
+import { createDoc, getDoc, deleteAll } from "../../prisma";
 
 // Disallow body parsing, consume as stream
 export const config = {
@@ -17,8 +17,8 @@ export const config = {
 type Data = {
   data: {
     name: string | string[],
-    url: string | string[];
-} | null;
+    url: string | string[],
+} | string;
 }
 
 // Formidable Middleware
@@ -29,7 +29,7 @@ const parseForm = async (req: NextApiRequest): Promise<{fields: formidable.Field
       
       const uploadDir = join(
         process.cwd(),
-        `/uploads/${datefns.format(Date.now(), "dd-MM-Y")}`
+        `./public/uploads/${datefns.format(Date.now(), "dd-MM-Y")}`
       );
   
       try {
@@ -76,14 +76,17 @@ export default async function handler(
 
   if(req.method === 'POST') {
     const { files } = await parseForm(req);
+    // Map each files array to a media file
     const file = Array.isArray(files) ? files.map(f => f.media as formidable.File) : files.media;
-    let url = Array.isArray(file) ? file.map((f)=> f.filepath) : file.filepath;
+    // Get url and new name
+    let url = Array.isArray(file) ? file.map((f)=> f.filepath.replace('/Users/mili.myname/Desktop/seal-code-challenge/public/uploads/https://drive.google.com/file/d/1sByZPzcpxS8p1l64F21JjoDD5I298YJT/view?usp=sharing', '')) : file.filepath.replace('/Users/mili.myname/Desktop/seal-code-challenge/public/uploads/https://drive.google.com/file/d/1sByZPzcpxS8p1l64F21JjoDD5I298YJT/view?usp=sharing', '');
     let name = Array.isArray(file) ? file.map((f)=> f.newFilename) : file.newFilename;
+    // Make sure url and name are arrays
     url = Array.isArray(url) ? url : [url];
     name = Array.isArray(name) ? name : [name];
 
     // Post it to the database
-    createDoc({name, url});
+    await createDoc({name, url});
 
     res.status(200).json({
       data: {
@@ -94,5 +97,20 @@ export default async function handler(
     
     
   }
+
+  if(req.method === 'GET'){
+    const docs = await getDoc()
+    res.status(200).json({
+      data: JSON.stringify(docs),
+    });
+  }
+
+  if(req.method === 'DELETE'){
+    const docs = await deleteAll();
+    res.status(200).json({
+      data: 'Deleted all',
+    });
+  }
+
   
 }

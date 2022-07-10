@@ -20,3 +20,7 @@ export const createDoc = async ({name, url} : {name: string[]; url:string[]}) =>
 export const getDoc = async () => {
     return await prisma.doc.findMany();
 }
+
+export const deleteAll = async () => {
+  return await prisma.doc.deleteMany();
+}
