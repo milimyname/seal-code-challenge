@@ -1,12 +1,8 @@
 import { useState, MouseEvent, ChangeEvent, FormEvent} from "react";
 
-
-
-
 const Form = () => {
   const [file, SetFile] = useState<FileList | null>(null);
   const [inputElement, setInputElement] = useState<HTMLInputElement | null>(null);
-  const [previewUrl, SetPreviewUrl] = useState<string | null>(null);
 
   // Handle file change 
   const handleUploadOnChange = (e : ChangeEvent<HTMLInputElement>) => {
@@ -19,7 +15,6 @@ const Form = () => {
     const file = fileInput.files;
 
     SetFile(file);
-    // SetPreviewUrl(URL.createObjectURL(file[0]));
 
     setInputElement(fileInput);
   };
@@ -27,7 +22,7 @@ const Form = () => {
   const handleUploadOnSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
 
-    if(!file) return;
+    if(!file) return alert('No file was chosen');
     
     try{
     let formData = new FormData();

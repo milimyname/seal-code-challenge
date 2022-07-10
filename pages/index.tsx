@@ -14,6 +14,7 @@ export interface TypeDoc{
 
 const Home: NextPage= () => {
   const [data, SetData] = useState<TypeDoc[]>()
+  const [loading, SetLoading] = useState<boolean>(false)
 
   const getAllDocs = async () => {
    const {data} = await (await fetch('/api/upload')).json();
@@ -24,9 +25,10 @@ const Home: NextPage= () => {
 
   useEffect(
       () => {
-      getAllDocs()
+      getAllDocs();
+      if(data) SetLoading(true);
     }
-  , [])
+  , [data])
 
   return (
     <div className='max-w-6xl mx-auto'>
@@ -44,10 +46,10 @@ const Home: NextPage= () => {
       </header>
 
       <main className='grid grid-cols-3 pt-10 gap-8'>
-        {
+        { loading ? 
           data?.map((doc: TypeDoc) => {
             return <FileComponent key={doc.id} doc={doc}/>
-          })
+          }) : <h1 className='text-4xl text-white'>Loading...</h1>
         }
       </main>
 

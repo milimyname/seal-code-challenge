@@ -14,15 +14,6 @@ const FileComponent = ({doc}: {doc : TypeDoc}) => {
     if(name.includes(".png") || name.includes(".jpeg") || name.includes(".jpg") || name.includes(".svg")) return "image"
     if(name.includes(".txt")) return "text"
   }
-
-  // save file
-  const handleSave = async (e: MouseEvent<HTMLButtonElement>)=>{
-    e.preventDefault()
-    
-    console.log('clicked')
-   await fetch('/api/download')
-    // setNumberOfDownloads(numberOfDownloads + 1);
-  }
   
 
   return (
@@ -30,23 +21,23 @@ const FileComponent = ({doc}: {doc : TypeDoc}) => {
     {doc.name.map(
       (name: string, i: number) => 
         (
-            <div className={` bg-white rounded-lg py-5 px-5 shadow-xl shadow-${handleExtension(name)} transition ease-in hover:translate-y-[2px]`} key={i}>
+            <div className={`bg-white rounded-lg py-5 px-5 shadow-xl shadow-${handleExtension(name)} transition ease-in hover:translate-y-[2px]`} key={i}>
               <div className="group flex justify-between items-start gap-5">
                 <Image src={`/icons/${handleExtension(name)}.svg`} alt={`${name.split('.')[1]} icon`} width={22} height={27}/>
-                <Link href=''>
+                <Link href={`preview/${doc.url[i]}`}>
                   <a className={`flex-1 transition ease-in group-hover:text-${handleExtension(name)} `}>
                     <h2 className="text-[1.6rem] font-bold ">{name.split('-')[0]}</h2> 
                   </a> 
                 </Link>
                 <Link href={`api/download?url=${doc.url[i]}`}>
-                  <a>
+                  <a onClick={()=>setNumberOfDownloads(numberOfDownloads + 1)}>
                       <Image src="/icons/download.svg" alt="download icon" width={14} height={14}/>  
                   </a> 
                 </Link>
               </div>
               <div className="flex justify-between items-center">
-                <p className="text-[1rem] text-black text-opacity-50 pl-[3rem]">{format(new Date(doc.createdAt), 'dd/MM/Y')}</p>
-                <p className="text-black text-[1.2rem]">10</p>
+                <p className="text-[1rem] text-black text-opacity-50 pl-[3.4rem]">{format(new Date(doc.createdAt), 'dd/MM/Y')}</p>
+                <p className="text-black text-[1.2rem]">{numberOfDownloads}</p>
               </div>
             </div>
         )
