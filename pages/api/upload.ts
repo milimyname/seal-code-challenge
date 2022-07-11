@@ -3,7 +3,6 @@ import type { NextApiRequest, NextApiResponse, } from 'next'
 import formidable from 'formidable'
 import mime from 'mime'
 import * as datefns from 'date-fns'
-import {join} from 'path';
 import { mkdir, stat } from "fs/promises";
 import { createDoc, getDoc, deleteAll } from "../../prisma";
 
@@ -27,10 +26,8 @@ const parseForm = async (req: NextApiRequest): Promise<{fields: formidable.Field
   return await new Promise(
     async(resolve, reject) =>{
       
-      const uploadDir = join(
-        process.cwd(),
-        `./public/uploads/${datefns.format(Date.now(), "dd-MM-Y")}`
-      );
+      const uploadDir = 
+        `./public/uploads/${datefns.format(Date.now(), "dd-MM-Y")}`;
   
       try {
         await stat(uploadDir);
