@@ -4,7 +4,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from "next/router"
 import { MouseEvent, useEffect, useState} from "react";
-import { dirname } from 'path'
 
 
 const Preview: NextPage = () => {
@@ -28,11 +27,12 @@ const Preview: NextPage = () => {
     if(!pid) return;
 
     if(pid[1].split('.')[1] === 'jpg' || pid[1].split('.')[1] === 'png' || pid[1].split('.')[1] === 'jpeg')
-      return <Image src={`${__dirname}/uploads/${pid[0]}/${pid[1]}`} width={'100%'} height={'100%'} alt={`${pid[1].split('-')[0]}`} />
+      return <Image src={`/uploads/${pid[0]}/${pid[1]}`} width={'100%'} height={'100%'} alt={`${pid[1].split('-')[0]}`} />
      else 
-      return <iframe src={`${__dirname}/uploads/${pid[0]}/${pid[1]}`} width={`100%`} height={'680'}></iframe>
+      return <iframe src={`/uploads/${pid[0]}/${pid[1]}`} width={`100%`} height={'680'}></iframe>
     
   }
+  
 
 
   const handleCopyLink = async (e: MouseEvent<HTMLButtonElement>)=>{
