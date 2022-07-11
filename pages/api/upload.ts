@@ -26,7 +26,8 @@ const parseForm = async (req: NextApiRequest): Promise<{fields: formidable.Field
   return await new Promise(
     async(resolve, reject) =>{
       
-      const uploadDir =`/uploads/${datefns.format(Date.now(), "dd-MM-Y")}`;
+      const uploadDir = `${__dirname}/public/uploads/${datefns.format(Date.now(), "dd-MM-Y")}`
+;
   
       try {
         await stat(uploadDir);
