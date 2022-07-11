@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse, } from 'next'
 import formidable from 'formidable'
 import mime from 'mime'
 import * as datefns from 'date-fns'
+import {join} from 'path';
 import { mkdir, stat } from "fs/promises";
 import { createDoc, getDoc, deleteAll } from "../../prisma";
 
@@ -26,8 +27,10 @@ const parseForm = async (req: NextApiRequest): Promise<{fields: formidable.Field
   return await new Promise(
     async(resolve, reject) =>{
       
-      const uploadDir = `${__dirname}/public/uploads/${datefns.format(Date.now(), "dd-MM-Y")}`
-;
+      const uploadDir = join(
+        process.cwd(),
+        `./public/uploads/${datefns.format(Date.now(), "dd-MM-Y")}`
+      );
   
       try {
         await stat(uploadDir);
@@ -76,7 +79,7 @@ export default async function handler(
     // Map each files array to a media file
     const file = Array.isArray(files) ? files.map(f => f.media as formidable.File) : files.media;
     // Get url and new name
-    let url = Array.isArray(file) ? file.map((f)=> f.filepath.replace('/app/public/uploads/', '')) : file.filepath.replace('/app/public/uploads/', '');
+    let url = Array.isArray(file) ? file.map((f)=> f.filepath.replace('/app/public/uploads/', '')) : file.filepath.replace('app/public/uploads/', '');
     let name = Array.isArray(file) ? file.map((f)=> f.newFilename) : file.newFilename;
     // Make sure url and name are arrays
     url = Array.isArray(url) ? url : [url];
