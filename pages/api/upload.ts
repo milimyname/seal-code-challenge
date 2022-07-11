@@ -29,7 +29,7 @@ const parseForm = async (req: NextApiRequest): Promise<{fields: formidable.Field
       
       const uploadDir = join(
         process.cwd(),
-        `./public/uploads/${datefns.format(Date.now(), "dd-MM-Y")}`
+        `/uploads/${datefns.format(Date.now(), "dd-MM-Y")}`
       );
   
       try {
