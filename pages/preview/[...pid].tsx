@@ -1,6 +1,7 @@
 import type { NextPage, } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from "next/router"
 import { MouseEvent, useEffect, useState} from "react";
 
@@ -12,13 +13,25 @@ const Preview: NextPage = () => {
   const binaryData = [] as Array<string>;
 
   // Deactivate the link after a hour
-  useEffect(()=>{
-    setTimeout(() => {  
-      console.log('adsad')
-      URL.revokeObjectURL(link)
-    }, 1000 * 60 * 60);
+
+  useEffect( ()=>{
+    // setTimeout(() => {  
+    //   console.log('adsad')
+    //   URL.revokeObjectURL(link)
+    // }, 1000 * 60 * 6
+    // console.log(pid)
    }
-  ,[link])
+  ,[])
+
+  const previewFile = ()=>{
+    if(!pid) return;
+
+    if(pid[1].split('.')[1] === 'jpg' || pid[1].split('.')[1] === 'png' || pid[1].split('.')[1] === 'jpeg')
+      return <Image src={`/uploads/${pid[0]}/${pid[1]}`} width={'100%'} height={'100%'} alt={`${pid[1].split('-')[0]}`} />
+     else 
+      return <iframe src={`/uploads/${pid[0]}/${pid[1]}`} width={`100%`} height={'680'}></iframe>
+    
+  }
 
 
   const handleCopyLink = async (e: MouseEvent<HTMLButtonElement>)=>{
@@ -63,10 +76,7 @@ const Preview: NextPage = () => {
       </header>
 
       <main className='pt-10'>
-        {
-          pid && <embed src={`../uploads/${pid[0]}/${pid[1]}`} width={`100%`} height={'200'}/>
-        }
-        
+        {previewFile()}
       </main>
 
     </div>
