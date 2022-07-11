@@ -79,7 +79,7 @@ export default async function handler(
     // Map each files array to a media file
     const file = Array.isArray(files) ? files.map(f => f.media as formidable.File) : files.media;
     // Get url and new name
-    let url = Array.isArray(file) ? file.map((f)=> f.filepath.replace('/Users/mili.myname/Desktop/seal-code-challenge/public/uploads/', '')) : file.filepath.replace('/Users/mili.myname/Desktop/seal-code-challenge/public/uploads/', '');
+    let url = Array.isArray(file) ? file.map((f)=> f.filepath.replace('app/public/uploads', '')) : file.filepath.replace('app/public/uploads', '');
     let name = Array.isArray(file) ? file.map((f)=> f.newFilename) : file.newFilename;
     // Make sure url and name are arrays
     url = Array.isArray(url) ? url : [url];

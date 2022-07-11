@@ -14,6 +14,7 @@ const Preview: NextPage = () => {
   // Deactivate the link after a hour
   useEffect(()=>{
     setTimeout(() => {  
+      console.log('adsad')
       URL.revokeObjectURL(link)
     }, 1000 * 60 * 60);
    }
@@ -35,6 +36,8 @@ const Preview: NextPage = () => {
   }
 
 
+
+
   return (
     <div className='max-w-6xl mx-auto'>
       <Head>
@@ -53,7 +56,7 @@ const Preview: NextPage = () => {
           <h1 className="text-4xl text-white">
             {pid && pid[1].split('-')[0]}
           </h1>
-          <button className="text-2xl text-white bg-text rounded-lg px-12 py-4 cursor-pointer" onClick={handleCopyLink} >
+          <button className="text-2xl text-white bg-text rounded-lg px-12 py-4 cursor-pointer" onClick={handleCopyLink}>
             Share
           </button>
         </div>
@@ -61,8 +64,9 @@ const Preview: NextPage = () => {
 
       <main className='pt-10'>
         {
-          pid && <embed src={`/uploads/${pid[0]}/${pid[1]}`} width={`100%`} height={'680'}/>
+          pid && <embed src={`../uploads/${pid[0]}/${pid[1]}`} width={`100%`} height={'200'}/>
         }
+        
       </main>
 
     </div>
