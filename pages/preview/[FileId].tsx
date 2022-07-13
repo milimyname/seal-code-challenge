@@ -20,7 +20,7 @@ const Preview: NextPage = () => {
       if(err) router.push('/404');
       console.log(decoded)
     });
-  },[tokenId, tokenToVerify])
+  },[tokenId, tokenToVerify, router])
 
   const previewFile = ()=>{
     if(!FileId) return;

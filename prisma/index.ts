@@ -24,3 +24,4 @@ export const getDoc = async () => {
 export const deleteAll = async () => {
   return await prisma.doc.deleteMany();
 }
+

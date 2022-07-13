@@ -1,8 +1,9 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useEffect, useState} from 'react'
+import { useEffect, useState, } from 'react'
 import FileComponent from '../components/FileComponent'
 import Form from '../components/Form'
+
 
 export interface TypeDoc{
   id: string;
@@ -15,21 +16,21 @@ export interface TypeDoc{
 const Home: NextPage= () => {
   const [data, SetData] = useState<TypeDoc[]>()
   const [loading, SetLoading] = useState<boolean>(false)
+  
+  
 
   // Get Data from API
   const getAllDocs = async () => {
-   const {data} = await (await fetch('/api/upload')).json();
+    const {data} = await (await fetch('/api/upload')).json();
     const json = JSON.parse(data)
     SetData(json)
-    
   }
 
-  useEffect(
-      () => {
-      getAllDocs();
-      if(data) SetLoading(true);
-    }
-  , [data])
+  useEffect(() => {
+    getAllDocs()
+    SetLoading(true)
+  }
+  , [loading])
 
   return (
     <div className='max-w-6xl mx-auto'>
@@ -57,8 +58,5 @@ const Home: NextPage= () => {
     </div>
   )
 }
-
-
-
 
 export default Home
