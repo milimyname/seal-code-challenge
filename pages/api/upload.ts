@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse, } from 'next'
 import formidable from 'formidable'
 import mime from 'mime'
 import { createDoc, getDoc, deleteAll } from "../../prisma";
+import { dir } from "../../config/config";
 
 // Disallow body parsing, consume as stream
 export const config = {
@@ -24,7 +25,7 @@ const parseForm = async (req: NextApiRequest): Promise<{fields: formidable.Field
   return await new Promise(
     async(resolve, reject) =>{
       
-      const uploadDir = `public/img/`;
+      const uploadDir = dir;
   
       let filename = ""; //  To avoid duplicate upload
       const form = formidable({

@@ -10,7 +10,6 @@ const pipeline= promisify(stream.pipeline);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   // Only works with absolute urls
-  
   const { url } = req.query;
   const response = await fetch(`${server}/img/${url}`) as any;
   if (!response.ok)
