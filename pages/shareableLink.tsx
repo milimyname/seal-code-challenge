@@ -13,7 +13,6 @@ const ShareableLink = () => {
     FileId && setTokenToVerify(FileId.split('tokenId=')[1]);
     tokenToVerify && jwt.verify(tokenToVerify, 'secret', async (err, decoded) => {
       if(err) router.push('/404');
-      console.log(decoded)
     });
   },[tokenToVerify, FileId, router])
 

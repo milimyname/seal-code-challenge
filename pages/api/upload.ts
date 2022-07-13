@@ -3,8 +3,7 @@ import type { NextApiRequest, NextApiResponse, } from 'next'
 import formidable from 'formidable'
 import mime from 'mime'
 import { createDoc, getDoc, deleteAll } from "../../prisma";
-import { join } from 'path';
-import { dir } from '../../config/config';
+import { server } from '../../config/config';
 
 // Disallow body parsing, consume as stream
 export const config = {
@@ -26,7 +25,7 @@ const parseForm = async (req: NextApiRequest): Promise<{fields: formidable.Field
   return await new Promise(
     async(resolve, reject) =>{
       
-      const uploadDir = join(process.cwd(), `${dir}/img`);
+      const uploadDir = `${server}/img`;
   
       let filename = ""; //  To avoid duplicate upload
       const form = formidable({
@@ -63,7 +62,7 @@ export default async function handler(
     // Map each files array to a media file
     const file = Array.isArray(files) ? files.map(f => f.media as formidable.File) : files.media;
     // Get url and new name
-    let url = Array.isArray(file) ? file.map((f)=> f.filepath.split('img/')[1]) : file.filepath.split('img/')[1];
+    let url = Array.isArray(file) ? file.map((f)=> f.filepath) : file.filepath;
     let name = Array.isArray(file) ? file.map((f)=> f.newFilename) : file.newFilename;
     // Make sure url and name are arrays
     url = Array.isArray(url) ? url : [url];
@@ -90,7 +89,7 @@ export default async function handler(
   }
 
   if(req.method === 'DELETE'){
-    const docs = await deleteAll();
+    await deleteAll();
     res.status(200).json({
       data: 'Deleted all',
     });

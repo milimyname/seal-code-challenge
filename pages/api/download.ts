@@ -5,8 +5,6 @@ import {server} from '../../config/config';
 
 const pipeline= promisify(stream.pipeline);
 
-
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   // Only works with absolute urls
