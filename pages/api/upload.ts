@@ -2,8 +2,6 @@
 import type { NextApiRequest, NextApiResponse, } from 'next'
 import formidable from 'formidable'
 import mime from 'mime'
-import * as datefns from 'date-fns'
-import { mkdir, stat } from "fs/promises";
 import { createDoc, getDoc, deleteAll } from "../../prisma";
 
 // Disallow body parsing, consume as stream
@@ -26,20 +24,7 @@ const parseForm = async (req: NextApiRequest): Promise<{fields: formidable.Field
   return await new Promise(
     async(resolve, reject) =>{
       
-      const uploadDir = 
-        `./public/uploads/${datefns.format(Date.now(), "dd-MM-Y")}`;
-  
-      try {
-        await stat(uploadDir);
-      } catch (e: any) {
-        if (e.code === "ENOENT") {
-          await mkdir(uploadDir, { recursive: true });
-        } else {
-          console.error(e);
-          reject(e);
-          return;
-        }
-      }
+      const uploadDir = `public/img/`;
   
       let filename = ""; //  To avoid duplicate upload
       const form = formidable({
@@ -76,7 +61,7 @@ export default async function handler(
     // Map each files array to a media file
     const file = Array.isArray(files) ? files.map(f => f.media as formidable.File) : files.media;
     // Get url and new name
-    let url = Array.isArray(file) ? file.map((f)=> f.filepath.replace('var/task/public/uploads/', '')) : file.filepath.replace('var/task/public/uploads/', '');
+    let url = Array.isArray(file) ? file.map((f)=> f.filepath.split('img/')[1]) : file.filepath.split('img/')[1];
     let name = Array.isArray(file) ? file.map((f)=> f.newFilename) : file.newFilename;
     // Make sure url and name are arrays
     url = Array.isArray(url) ? url : [url];
