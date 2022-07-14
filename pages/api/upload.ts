@@ -1,4 +1,4 @@
-le// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse, } from 'next'
 import formidable from 'formidable'
 import mime from 'mime'
