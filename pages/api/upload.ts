@@ -26,7 +26,7 @@ const parseForm = async (req: NextApiRequest): Promise<{fields: formidable.Field
   return await new Promise(
     async(resolve, reject) =>{
       
-      const uploadDir = join(process.cwd(), `/${dir}/img`);
+      const uploadDir = join(process.cwd(), `/img`);
   
       let filename = ""; //  To avoid duplicate upload
       const form = formidable({
