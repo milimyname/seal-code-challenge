@@ -24,12 +24,12 @@ const FileComponent = ({doc}: {doc : TypeDoc}) => {
             <div className={`bg-white rounded-lg py-5 px-5 shadow-xl shadow-${handleExtension(name)} transition ease-in hover:translate-y-[2px]`} key={i}>
               <div className="group flex justify-between items-start gap-5">
                 <Image src={`/icons/${handleExtension(name)}.svg`} alt={`${name.split('.')[1]} icon`} width={22} height={27}/>
-                <Link href={`/preview/${doc.url[i]}`}>
+                <Link href={`preview/${doc.id}`}>
                   <a className={`flex-1 transition ease-in group-hover:text-${handleExtension(name)} `}>
                     <h2 className="text-[1.6rem] font-bold ">{name.split('-')[0]}</h2> 
                   </a> 
                 </Link>
-                <Link href={`api/download?url=${doc.url[i]}`}>
+                <Link href={`api/download?id=${doc.id}`}>
                   <a onClick={()=>setNumberOfDownloads(numberOfDownloads + 1)}>
                       <Image src="/icons/download.svg" alt="download icon" width={14} height={14}/>  
                   </a> 

@@ -6,6 +6,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        md: { max: "768px" },
+        sm: { max: "375px" },
+      },
       colors: {
         excel: "#5C973E",
         image: "#679FB7",

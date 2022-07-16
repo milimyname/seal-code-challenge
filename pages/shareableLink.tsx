@@ -1,28 +1,37 @@
 import { useRouter } from "next/router"
-import {useEffect, useState} from "react";
+import {useEffect, useState, useCallback} from "react";
 import Image from "next/image";
 import jwt from 'jsonwebtoken'
 
 
 const ShareableLink = () => {
   const [tokenToVerify, setTokenToVerify] = useState<string | null>(null);
+  const [doc, setDoc] = useState<{name : string[], url: string[]} | null>(null);
   const router = useRouter();
-  const { FileId } = router.query as { FileId: string };
+  const { tokenId, FileId } = router.query as { tokenId: string, FileId: string };
+
+
+  const getDocById = useCallback(async () => {
+    if(!FileId) return;
+    const data = await (await fetch(`/api/getDoc/${FileId}`)).json();
+    setDoc(data);
+  }, [FileId]);
   
   useEffect(()=>{
-    FileId && setTokenToVerify(FileId.split('tokenId=')[1]);
+    getDocById();
+    tokenId && setTokenToVerify(tokenId.split('tokenId=')[1]);
     tokenToVerify && jwt.verify(tokenToVerify, 'secret', async (err, decoded) => {
       if(err) router.push('/404');
     });
-  },[tokenToVerify, FileId, router])
+  },[tokenToVerify, tokenId, router,getDocById])
 
   const previewFile = ()=>{
-    if(!FileId) return;
+    if(!doc) return;
 
-    if(FileId.split('.')[1] === 'jpg' || FileId.split('.')[1] === 'png' || FileId.split('.')[1] === 'jpeg')
-      return <Image src={`/img/${FileId}`} width={'100%'} height={'100%'} alt={`${FileId.split('-')[0]}`} />
+    if(doc.name[0].split('.')[1] === 'jpg' || doc.name[0].split('.')[1] === 'png' || doc.name[0].split('.')[1] === 'jpeg')
+      return <Image src={doc.url[0]} width={'100%'} height={'100%'} alt={`${tokenId.split('.')[0]}`} />
     else 
-      return <iframe src={`../img/${FileId}`} width={`100%`} height={'100%'}></iframe>
+      return <iframe src={doc.url[0]} width={`100%`} height={'100%'}></iframe>
     
   }
 

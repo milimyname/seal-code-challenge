@@ -16,11 +16,22 @@ export const createDoc = async ({name, url} : {name: string[]; url:string[]}) =>
   )
 };
 
-// Get Doc File
-export const getDoc = async () => {
+// Get All Docs 
+export const getAllDocs = async () => {
     return await prisma.doc.findMany();
 }
 
+// Get A Doc by Id
+export const getDocById = async (id: string) => {
+  return await prisma.doc.findUnique({
+      where: {
+          id,
+      },
+  });
+}
+
+
+// Delete All Docs
 export const deleteAll = async () => {
   return await prisma.doc.deleteMany();
 }

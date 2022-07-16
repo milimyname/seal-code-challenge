@@ -1,59 +1,63 @@
 import { useState, MouseEvent, ChangeEvent} from "react";
+import {storage} from "../firebase/initFirebase"
+import {ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage'
 
 const Form = () => {
-  const [file, SetFile] = useState<FileList | null>(null);
-  const [inputElement, setInputElement] = useState<HTMLInputElement | null>(null);
+  const [file, setFile] = useState<FileList | null>(null);
+  const firebaseUrl: string[] =[];
+  const fileName: string[] =[];
 
   // Handle file change 
   const handleUploadOnChange = (e : ChangeEvent<HTMLInputElement>) => {
-    const fileInput = e.target;
+    const fileInput = e.target.files;
 
-    if (!fileInput.files) {
+    if (!fileInput) {
       alert("No file was chosen");
       return;
     }
     // Update File
-    SetFile(fileInput.files);
+    setFile(fileInput);
   
-    // For clearing input
-    setInputElement(fileInput);
   };
 
   const handleUploadOnSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
 
     if(!file) return alert('No file was chosen');
+
+    // Upload file to firebase and get a new link
+    for(let i = 0; i < file.length; i++) {
+      const storagRef = ref(storage, `files/${file[i].name.split('.')[0]}-${Math.floor(Math.random() * 1000) + 1}` );
+      const uploadedFile = await uploadBytesResumable(storagRef, file[i]);
+      const newUrl = await getDownloadURL(uploadedFile.ref);
+      firebaseUrl.push(newUrl);
+      fileName.push(file[i].name);
+    }
+    
     
     try{
-    // Upload file
-    let formData = new FormData();
-    for (let i = 0; i < file.length; ++i) {
-      formData.append('media', file[i])
-    }
+
     // Send file
     await fetch('/api/upload', {
       method: "POST",
-      body: formData
+      body: JSON.stringify({
+        name: fileName,
+        url: firebaseUrl
+      }), 
+      headers:{
+        'Content-Type': 'application/json'
+      }
     })
 
-  } catch (error) {
-    // Handle error
-    console.error(error);
-    alert("Sorry! something went wrong.");
+    } catch (error) {
+      // Handle error
+      console.error(error);
+      alert("Sorry! something went wrong.");
+    }
+
+    document.location.reload();
   }
 
-  // Clear input
-  if(inputElement !== null) inputElement.value = "";
-  document.location.reload();
-  }
-  // Add a btn to delete all files
-  // const handleDeleteAllFiles = async (e: MouseEvent<HTMLButtonElement>) =>{
-  //   e.preventDefault();
-  //   alert('Deleted all files');
-  //   await fetch('/api/upload', {
-  //     method: "DELETE",
-  //   })
-  // }
 
   return (
     <form action="/api/form" method="post" onSubmit={(e) => e.preventDefault()} className="flex items-center gap-0" encType="multipart/form-data">
@@ -61,8 +65,7 @@ const Form = () => {
              className="block w-full text-lg text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-lg file:font-semibold file:bg-[#084261] file:text-[#74d8ff] file:transition-colors ease-in  hover:file:bg-[#2281b4]" 
              accept="image/*, .doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document, .csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .pdf" 
              onChange={handleUploadOnChange} multiple/>
-      <button type="submit" className="text-2xl text-white bg-[#2386C9] rounded-lg px-12 py-4 transition hover:translate-y-1" onClick={handleUploadOnSubmit}>Upload</button>
-      {/* <button type="submit" className="text-2xl text-white bg-[#2386C9] rounded-lg px-12 py-4 transition hover:translate-y-1" onClick={handleDeleteAllFiles}>Delete</button> */}
+      <button type="submit" className="text-2xl text-white bg-[#2386C9] rounded-lg px-12 py-4 transition hover:translate-y-1 sm:text-xl sm:px-8 sm:py-2" onClick={handleUploadOnSubmit}>Upload</button>
     </form>
   )
 }
