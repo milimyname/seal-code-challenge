@@ -8,7 +8,7 @@ module.exports = {
     extend: {
       screens: {
         md: { max: "768px" },
-        sm: { max: "375px" },
+        sm: { max: "425px" },
       },
       colors: {
         excel: "#5C973E",
