@@ -18,7 +18,7 @@ yarn dev
 ## Links
 
 - Solution URL: https://github.com/milimyname/seal-code-challenge
-- Live Site URL: https://seal-code-challenge-17tdxel1m-milimyname.vercel.app/
+- Live Site URL: https://seal-code-challenge.vercel.app/
 
 ## My Process
 
